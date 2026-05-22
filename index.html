@@ -1,0 +1,297 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATHENA - IA enseignante</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <section class="home-page" id="homePage">
+        <header class="home-header">
+            <div class="home-brand">
+                <img src="logo-test.png" alt="ATHENA Logo" class="home-logo-img">
+                <strong>ATHENA</strong>
+            </div>
+            <div class="home-actions">
+                <button class="home-mode-btn" onclick="basculerModeAccueil()">Mode sombre</button>
+                <button class="home-login-btn" onclick="ouvrirModalAuth()">Connexion</button>
+            </div>
+        </header>
+
+        <!-- Modal Authentification -->
+        <div id="authModal" class="auth-modal" style="display:none;">
+            <div class="auth-modal-content">
+                <button class="auth-close" onclick="fermerModalAuth()">×</button>
+                
+                <!-- Tab Connexion -->
+                <div id="authTab" class="auth-tab" style="display:block;">
+                    <h2>Connexion</h2>
+                    <div class="auth-form">
+                        <input type="email" id="loginEmail" placeholder="Email" class="auth-input">
+                        <input type="password" id="loginPassword" placeholder="Mot de passe" class="auth-input">
+                        <button onclick="effectuerConnexion()" class="auth-btn">Se connecter</button>
+                        <p class="auth-toggle">Pas de compte ? <a onclick="basculerVersInscription()">Créer un compte</a></p>
+                        <p class="auth-toggle"><a onclick="ouvrirReset()">Mot de passe oublié ?</a></p>
+                    </div>
+                </div>
+                
+                <!-- Tab Inscription Étape 1 -->
+                <div id="inscriptionTab" class="auth-tab" style="display:none;">
+                    <h2>Créer un compte - Étape 1/3</h2>
+                    <div class="auth-form">
+                        <input type="text" id="insNom" placeholder="Nom" class="auth-input">
+                        <input type="text" id="insPrenom" placeholder="Prénom" class="auth-input">
+                        <input type="email" id="insEmail" placeholder="Email" class="auth-input">
+                        <button onclick="verifierEmailEtpasser()" class="auth-btn">Vérifier et continuer</button>
+                        <p class="auth-toggle">Vous avez un compte ? <a onclick="basculerVersConnexion()">Se connecter</a></p>
+                    </div>
+                </div>
+                
+                <!-- Tab Inscription Étape 2 -->
+                <div id="inscriptionTab2" class="auth-tab" style="display:none;">
+                    <h2>Créer un compte - Étape 2/3</h2>
+                    <div class="auth-form">
+                        <input type="date" id="insDateNaissance" placeholder="Date de naissance" class="auth-input">
+                        <select id="insNiveauScolaire" class="auth-input">
+                            <option value="">Sélectionner le niveau scolaire</option>
+                            <option value="1er_cycle">1er cycle</option>
+                            <option value="2e_cycle">2e cycle</option>
+                            <option value="3e_cycle">3e cycle</option>
+                        </select>
+                        <button onclick="allerAEtape3()" class="auth-btn">Continuer</button>
+                    </div>
+                </div>
+                
+                <!-- Tab Inscription Étape 3 -->
+                <div id="inscriptionTab3" class="auth-tab" style="display:none;">
+                    <h2>Créer un compte - Étape 3/3</h2>
+                    <p class="auth-label">Choisir la personnalité d'ATHENA :</p>
+                    <div class="auth-form">
+                        <div id="personaliteOptions" class="personalite-grid"></div>
+                        <button onclick="terminerInscription()" class="auth-btn">Créer mon compte</button>
+                    </div>
+                </div>
+
+                <!-- Reset password Tab -->
+                <div id="resetTab" class="auth-tab" style="display:none;">
+                    <h2>Réinitialiser le mot de passe</h2>
+                    <div class="auth-form">
+                        <input type="email" id="resetEmail" placeholder="Email" class="auth-input">
+                        <button onclick="envoyerCodeReset()" class="auth-btn">Envoyer le code</button>
+                        <input type="text" id="resetCode" placeholder="Code reçu" class="auth-input" style="display:none;">
+                        <input type="password" id="resetNewPassword" placeholder="Nouveau mot de passe" class="auth-input" style="display:none;">
+                        <button id="resetConfirmBtn" onclick="confirmerReset()" class="auth-btn" style="display:none;">Confirmer</button>
+                        <p class="auth-toggle"><a onclick="basculerVersConnexion()">Retour à la connexion</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main class="home-hero">
+            <div class="home-copy">
+                <p class="home-kicker">Educatif • Intelligent • Accessible</p>
+                <h1>ATHENA, ton assistant pédagogique pour apprendre avec confiance</h1>
+                <p class="home-description">
+                    Découvre des cours clairs, des exercices pratiques et des ressources
+                    adaptées à ton niveau. ATHENA t'accompagne pas à pas pour progresser en
+                    français, mathématiques, histoire et sciences.
+                </p>
+                <button class="home-start-btn" onclick="ouvrirModalAuth()">Découvrir ATHENA</button>
+            </div>
+
+            <div class="home-visual" aria-label="Aperçu des ressources ATHENA">
+                <div class="carousel-wrapper">
+                    <div class="carousel" id="homeCarousel">
+                        <img src="image-acceuil-1.webp" alt="Image d'apprentissage 1" class="carousel-slide" loading="lazy">
+                        <img src="image-acceuil-2.webp" alt="Image d'apprentissage 2" class="carousel-slide" loading="lazy">
+                    </div>
+                    <button class="carousel-btn carousel-prev" onclick="carouselPrev()">&#10094;</button>
+                    <button class="carousel-btn carousel-next" onclick="carouselNext()">&#10095;</button>
+                    <div class="carousel-dots" id="carouselDots"></div>
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <div class="app-container" id="athenaApp">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div>
+                    <h1>ATHENA</h1>
+                    <p>IA enseignante</p>
+                </div>
+            </div>
+
+            <button class="sidebar-btn primary" onclick="nouveauChat()">+ Nouvelle discussion</button>
+
+            <div class="sidebar-section">
+                <h2>Langue de réponse</h2>
+                <select id="langueSelect" class="langue-select" onchange="changerLangue()">
+                    <option value="fr">Français</option>
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="de">Deutsch</option>
+                    <option value="ar">العربية</option>
+                    <option value="pt">Português</option>
+                    <option value="it">Italiano</option>
+                    <option value="zh">中文</option>
+                </select>
+            </div>
+
+            <div class="sidebar-section">
+                <h2>Clé API Groq</h2>
+                <div class="api-key-wrapper">
+                    <input type="password" id="apiKeyInput" class="api-key-input" placeholder="gsk_..." />
+                    <button class="sidebar-btn api-key-save-btn" onclick="sauvegarderApiKey()">Enregistrer</button>
+                    <button class="sidebar-btn" onclick="testerApiKey()">Tester la connexion</button>
+                </div>
+                <p class="api-key-status" id="apiKeyStatus"></p>
+            </div>
+
+            <div class="sidebar-section">
+                <h2>Quizz</h2>
+                <button class="sidebar-btn" onclick="ouvrirQuizModal()">Quizz</button>
+            </div>
+
+            <div class="sidebar-section">
+                <h2>Récentes discussions</h2>
+                <div class="chat-history" id="chatHistory"></div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-bar">
+                <div class="top-left">
+                    <div>
+                        <h1>ATHENA</h1>
+                        <p>Apprends avec des cours structurés</p>
+                    </div>
+                </div>
+                <div class="top-right" id="topRight" style="display:none;">
+                    <div class="user-menu-btn" onclick="toggleUserMenu()">
+                        <span id="userMenuName">Mon compte</span>
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2369c0ff'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath fill='white' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" alt="Compte" class="user-avatar">
+                    </div>
+                    <div id="userMenu" class="user-menu" style="display:none;">
+                        <button onclick="afficherProfil()">Mon profil</button>
+                        <button onclick="seDeconnecter()">Déconnexion</button>
+                    </div>
+                </div>
+            </div>
+
+            <section class="chat-panel">
+                <div class="welcome-section" id="welcomeSection">
+                    <h2>Bonjour, je suis ATHENA</h2>
+                    <p>Pose-moi une question ou choisis une matière ci-dessous.</p>
+                </div>
+
+                <div class="chat-messages" id="messages"></div>
+            </section>
+
+            <section class="bottom-section">
+                <div class="chat-input-wrapper" id="inputWrapper">
+                    <div class="input-container">
+                        <input type="text" id="question" placeholder="Pose ta question à ATHENA..." onkeypress="if(event.key==='Enter') envoyerMessage()">
+                        <input type="file" id="imageUpload" accept="image/*" onchange="previewImage()" style="display:none;">
+                        <button class="send-btn" onclick="document.getElementById('imageUpload').click()">Image</button>
+                        <button class="send-btn" onclick="envoyerMessage()">Envoyer</button>
+                    </div>
+                </div>
+                <div id="imagePreview" style="display:none; max-width:200px; margin:10px 0;"></div>
+
+                <div class="topic-section" id="topicSection">
+                    <button onclick="demarrerCours('mathematiques', 'Mathématiques')" class="topic-btn">
+                        <span class="topic-name">Mathématiques</span>
+                    </button>
+                    <button onclick="demarrerCours('francais', 'Français')" class="topic-btn">
+                        <span class="topic-name">Français</span>
+                    </button>
+                    <button onclick="demarrerCours('histoire', 'Histoire')" class="topic-btn">
+                        <span class="topic-name">Histoire</span>
+                    </button>
+                    <button onclick="demarrerCours('sciences', 'Sciences')" class="topic-btn">
+                        <span class="topic-name">Sciences</span>
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Profile Page -->
+    <section id="profilePage" class="profile-page" style="display:none;">
+        <div class="profile-card">
+            <button class="auth-close" onclick="fermerProfile()">X</button>
+            <h2>Mon profil</h2>
+            <div class="profile-form">
+                <label>Nom</label>
+                <input type="text" id="profileNomInput" class="auth-input">
+                <label>Prénom</label>
+                <input type="text" id="profilePrenomInput" class="auth-input">
+                <label>Email</label>
+                <input type="email" id="profileEmailInput" class="auth-input">
+                <label>Nouveau mot de passe</label>
+                <input type="password" id="profilePasswordInput" class="auth-input" placeholder="Laisser vide pour ne pas changer">
+                <label>Niveau scolaire</label>
+                <select id="profileNiveauInput" class="auth-input">
+                    <option value="">Sélectionner le niveau</option>
+                    <option value="1er_cycle">1er cycle</option>
+                    <option value="2e_cycle">2e cycle</option>
+                    <option value="3e_cycle">3e cycle</option>
+                </select>
+                <label>Personnalité d'ATHENA</label>
+                <select id="profilePersonaliteInput" class="auth-input"></select>
+                <div class="profile-actions">
+                    <button class="auth-btn" onclick="sauvegarderProfil()">Enregistrer</button>
+                    <button class="auth-btn" onclick="fermerProfile()" style="background:#0b2240">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Message box for uniform small messages -->
+    <div id="siteMessage" class="site-message" style="display:none;"></div>
+
+    <!-- Quiz Modal -->
+    <div id="quizModal" class="auth-modal" style="display:none;">
+        <div class="auth-modal-content">
+            <button class="auth-close" onclick="fermerQuizModal()">X</button>
+            <h2>Creer un Quizz</h2>
+            <div class="auth-form">
+                <label>Matiere</label>
+                <select id="quizMatiere" class="auth-input">
+                    <option value="">Selectionner une matiere</option>
+                    <option value="francais">Français</option>
+                    <option value="mathematiques">Mathématiques</option>
+                    <option value="histoire">Histoire</option>
+                    <option value="sciences">Sciences</option>
+                </select>
+
+                <label>Niveau scolaire</label>
+                <select id="quizNiveau" class="auth-input">
+                    <option value="">Sélectionner le cycle</option>
+                    <option value="cycle 1">Cycle 1</option>
+                    <option value="cycle 2">Cycle 2</option>
+                    <option value="cycle 3">Cycle 3</option>
+                </select>
+
+                <label>Sujet spécifique</label>
+                <input type="text" id="quizSujetSpecifique" class="auth-input" placeholder="Ex : fractions, passé composé, révolution française">
+                
+                <label>Duree (minutes)</label>
+                <input type="number" id="quizDuree" class="auth-input" min="1" max="120" value="15">
+                
+                <label>Nombre de questions</label>
+                <input type="number" id="quizNbQuestions" class="auth-input" min="1" max="50" value="10">
+                
+                <label>Points par bonne reponse</label>
+                <input type="number" id="quizPoints" class="auth-input" min="1" max="100" value="10">
+                
+                <button class="auth-btn" onclick="demarrerQuiz()">Demarrer le Quizz</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
